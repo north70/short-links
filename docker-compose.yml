@@ -50,15 +50,7 @@ services:
         networks:
             - ${CONTAINER_PREFIX}
 
-    redis:
-        image: redis:7.0-alpine3.15
-        container_name: ${CONTAINER_PREFIX}_redis
-        ports:
-            - 6379:6379
-        networks:
-            - ${CONTAINER_PREFIX}
-
 #Docker Networks
 networks:
-    base:
+    short_links:
      driver: bridge

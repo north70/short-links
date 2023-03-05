@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Web\Modules\Links\Controllers\LinksController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/status', function () {
     return response()->json(['status' => 'OK']);
 });
+
+Route::get('/links', [LinksController::class, 'show'])->name('links.show');
+Route::post('/links', [LinksController::class, 'generate'])->name('links.generate');
+Route::get('/links/{hash}', [LinksController::class, 'redirect'])->name('links.redirect');
