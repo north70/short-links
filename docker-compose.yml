@@ -1,0 +1,64 @@
+version: '3'
+
+services:
+    #PHP Service
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: ${CONTAINER_PREFIX}_app
+        restart: unless-stopped
+        environment:
+            XDEBUG_CONFIG: "remote_host=host.docker.internal remote_enable=1"
+            PHP_IDE_CONFIG: "serverName=${CONTAINER_PREFIX}-laravel"
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        networks:
+            - ${CONTAINER_PREFIX}
+        depends_on:
+            - db
+            - webserver
+
+    #Nginx Service
+    webserver:
+        image: nginx:alpine
+        container_name: ${CONTAINER_PREFIX}_webserver
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./:/var/www
+            - ./nginx/conf.d/:/etc/nginx/conf.d/
+        networks:
+            - ${CONTAINER_PREFIX}
+
+    #Postgres database
+    db:
+        image: postgres:15-alpine
+        container_name: ${CONTAINER_PREFIX}_database
+        ports:
+            - 5433:5432
+        volumes:
+            - ./db:/var/lib/postgresql/data
+        environment:
+            POSTGRES_DB: ${CONTAINER_PREFIX}
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+        networks:
+            - ${CONTAINER_PREFIX}
+
+    redis:
+        image: redis:7.0-alpine3.15
+        container_name: ${CONTAINER_PREFIX}_redis
+        ports:
+            - 6379:6379
+        networks:
+            - ${CONTAINER_PREFIX}
+
+#Docker Networks
+networks:
+    base:
+     driver: bridge

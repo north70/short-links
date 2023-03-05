@@ -1,0 +1,75 @@
+openapi: 3.0.1
+info:
+  title: Base app.
+  contact:
+    url: https://localhost:8000/
+  version: 1.0.0
+  description: Базовое laravel приложение
+servers:
+  - url: /api/
+tags:
+
+paths:
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  parameters:
+    PathId:
+      $ref: './common_parameters.yaml#/PathId'
+    QueryInclude:
+      $ref: './common_parameters.yaml#/QueryInclude'
+  schemas:
+    EmptyDataResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          nullable: true
+          example: null
+        meta:
+          type: object
+      required:
+        - data
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: './errors.yaml#/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: './errors.yaml#/ErrorResponse'
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: './errors.yaml#/ErrorResponse'
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: './errors.yaml#/ErrorResponse'
+    ServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: './errors.yaml#/ErrorResponse'
+    SuccessEmptyResponse:
+      description: 'Действие успешно выполнено'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EmptyDataResponse'
+security:
+  - bearerAuth: []

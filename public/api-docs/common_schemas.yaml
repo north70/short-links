@@ -1,0 +1,84 @@
+IdObject:
+  type: object
+  properties:
+    id:
+      type: integer
+      description: id
+      example: 1
+
+PaginationTypeOffsetEnum:
+  type: string
+  description: >
+    * Pagination types:
+    * `offset` - Пагинация используя offset
+  enum:
+    - offset
+  x-enum-varnames:
+    - OFFSET
+
+PaginationTypeEnum:
+  type: string
+  description: >
+    Pagination types:
+    * `cursor` - Пагинация используя cursor
+    * `offset` - Пагинация используя offset
+  enum:
+    - cursor
+    - offset
+  x-enum-varnames:
+    - CURSOR
+    - OFFSET
+
+RequestBodySort:
+  type: array
+  example: []
+  items:
+    type: string
+
+RequestBodyInclude:
+  type: array
+  example: []
+  items:
+    type: string
+
+
+RequestBodyPagination:
+  oneOf:
+    - $ref: '#/RequestBodyOffsetPagination'
+
+RequestBodyOffsetPagination:
+  type: object
+  properties:
+    limit:
+      type: integer
+      example: 20
+    offset:
+      type: integer
+      example: 0
+    type:
+      description: Тип пагинации
+      allOf:
+        - type: string
+        - $ref: '#/PaginationTypeOffsetEnum'
+
+ResponseBodyPagination:
+  oneOf:
+    - $ref: '#/ResponseBodyOffsetPagination'
+
+ResponseBodyOffsetPagination:
+  type: object
+  properties:
+    limit:
+      type: integer
+      example: 20
+    offset:
+      type: integer
+      example: 0
+    total:
+      type: integer
+      example: 253
+    type:
+      description: Тип пагинации
+      allOf:
+        - type: string
+        - $ref: '#/PaginationTypeOffsetEnum'
