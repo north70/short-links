@@ -2,6 +2,7 @@
 
 namespace App\Domain\Links\Models;
 
+use App\Domain\Links\Models\Factories\LinkFactory;
 use App\Domain\Support\Models\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -17,4 +18,9 @@ class Link extends Model
     protected $table = 'links';
 
     protected $fillable = ['origin_url', 'short_url', 'expired_at'];
+
+    public static function factory(): LinkFactory
+    {
+        return LinkFactory::new();
+    }
 }
